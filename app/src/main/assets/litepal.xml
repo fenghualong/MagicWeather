@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+
+    <dbname value="magic_weather" />
+
+    <version value="1" />
+
+    <list>
+        <mapping class="com.xidian.flyhigher.magicweather.db.Province" />
+        <mapping class="com.xidian.flyhigher.magicweather.db.City" />
+        <mapping class="com.xidian.flyhigher.magicweather.db.County" />
+    </list>
+
+</litepal>
