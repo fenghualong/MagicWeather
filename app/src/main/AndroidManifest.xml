@@ -16,26 +16,31 @@
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/magic_weather_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/magic_weather_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="WM2Rfm97wR8CpMxwouU6PUMBlGuZ9FpC"/>
-        <activity android:name=".MainActivity">
+            android:value="wzg4oxnWejxBBE7rUVT28RE6UCGQXlIY"/>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WeatherActivity" />
+        <activity
+            android:name=".WeatherActivity"
+            android:screenOrientation="portrait"/>
         <service android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote">
-        </service>
+        </service><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
     </application>
 
 </manifest>

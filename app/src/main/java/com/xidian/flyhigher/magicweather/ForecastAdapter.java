@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xidian.flyhigher.magicweather.gson.Forecast;
@@ -27,13 +28,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
+        View weatherView;
         ImageView weatherImage;
         TextView date;
         TextView min_max_Temp;
         LinearLayout linearLayout;
         public ViewHolder(View view,int nWidth) {
             super(view);
-
+            weatherView = view;
             weatherImage = (ImageView) view.findViewById(R.id.weather_image);
             date = (TextView) view.findViewById(R.id.weather_date);
             min_max_Temp = (TextView) view.findViewById(R.id.min_max_temperature);
@@ -55,7 +57,25 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.weather_item,parent,false);
-        ViewHolder holder = new ViewHolder(view,mItemWidth);
+        final ViewHolder holder = new ViewHolder(view,mItemWidth);
+
+        holder.weatherView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                int position = holder.getAdapterPosition();
+                Forecast forecast = mForecastList.get(position);
+                Toast.makeText(view.getContext(),"You clicked view"+ forecast.date,Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        holder.weatherImage.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                int position = holder.getAdapterPosition();
+                Forecast forecast = mForecastList.get(position);
+                Toast.makeText(view.getContext(),"You clicked image"+ forecast.temperature,Toast.LENGTH_SHORT).show();
+            }
+        });
         return holder;
     }
 

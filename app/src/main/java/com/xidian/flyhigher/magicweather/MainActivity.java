@@ -25,11 +25,25 @@ public class MainActivity extends AppCompatActivity {
     public LocationClient mLocationClient;
 
     String curPosition;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for m
+     * ore information.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+            if (prefs.getString("weather", null) != null) {
+              if(curPosition != null){
+                Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
+                intent.putExtra("position", curPosition);
+                startActivity(intent);
+                finish();
+                }
+    }
 
         //location
         try {
@@ -67,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
 //                finish();
 //            }
 //        }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
     @Override
@@ -91,6 +107,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+
     public class MyLocationListener implements BDLocationListener {
 
         @Override
@@ -99,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
             Log.i("MainActivity", "TEST: onConnectHotSpotMessage:" + s + "i: " + i);
             //return;
         }
-
 
 
         @Override
@@ -120,15 +140,15 @@ public class MainActivity extends AppCompatActivity {
                 currentPosition.append("网络");
             }
             //positionText.setText(currentPosition);
-            curPosition = location.getCity().toString();
-            Log.e("MainAcivity","curPosition: " + curPosition);
+            curPosition = currentPosition.toString();
+            Log.e("MainAcivity", "curPosition: " + curPosition);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             if (prefs.getString("weather", null) != null) {
 //                if(curPosition != null){
-                    Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
-                    intent.putExtra("position",curPosition);
-                    startActivity(intent);
-                    finish();
+                Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
+                intent.putExtra("position", curPosition);
+                startActivity(intent);
+                finish();
                 //}
             }
         }
@@ -139,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         mLocationClient.start();
     }
 
-    private void initLocation(){
+    private void initLocation() {
         LocationClientOption option = new LocationClientOption();
         option.setScanSpan(5000);
         //option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
@@ -148,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         mLocationClient.stop();
     }
