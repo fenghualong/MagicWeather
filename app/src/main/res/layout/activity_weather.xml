@@ -9,46 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.ant.liao.GifView
-                android:id="@+id/homeBackgroundGif"
+            <include
+                android:id="@+id/title_bar"
+                layout="@layout/title" />
+
+            <fragment
+                android:id="@+id/weather_fragment"
+                android:name="com.xidian.flyhigher.magicweather.WeatherFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
-            <include layout="@layout/title"
-                android:id="@+id/title_bar"/>
-
-            <TextView
-                android:id="@+id/weather"
-                android:layout_below="@id/title_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="15dp"
-                android:textSize="30sp"
-                android:textColorHighlight="@color/red"/>
-
-            <TextView
-                android:id="@+id/title_update_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/weather"
-                android:layout_alignParentLeft="true"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="16sp"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview_weather"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="8dp"/>
-
-        </RelativeLayout>
 
         <fragment
             android:id="@+id/choose_area_fragment"

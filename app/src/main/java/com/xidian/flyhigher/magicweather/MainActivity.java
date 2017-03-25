@@ -35,22 +35,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            if (prefs.getString("weather", null) != null) {
+        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        if (prefs.getString("weather", null) != null) {
               if(curPosition != null){
                 Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
                 intent.putExtra("position", curPosition);
                 startActivity(intent);
                 finish();
-                }
-    }
+              }
+        }*/
 
         //location
         try {
             mLocationClient = new LocationClient(getApplicationContext());
             mLocationClient.registerLocationListener(new MyLocationListener());
         } catch (Exception e) {
-
+               Log.e("MainActivity","LocationClient",e);
         }
         List<String> permissionList = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -71,18 +71,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             requestLocation();
         }
-
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        if (prefs.getString("weather", null) != null) {
-//            if(curPosition != null){
-//                Intent intent = new Intent(this, WeatherActivity.class);
-//                intent.putExtra("position",curPosition);
-//                startActivity(intent);
-//                finish();
-//            }
-//        }
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
     @Override
@@ -141,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
             }
             //positionText.setText(currentPosition);
             curPosition = currentPosition.toString();
+            Log.e("MainAcivity", "curPosition1: " + curPosition);
+            curPosition = "city="+location.getCity();
             Log.e("MainAcivity", "curPosition: " + curPosition);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             if (prefs.getString("weather", null) != null) {
