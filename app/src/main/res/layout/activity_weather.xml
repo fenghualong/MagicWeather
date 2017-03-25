@@ -18,12 +18,21 @@
                 android:id="@+id/title_bar"
                 layout="@layout/title" />
 
-            <fragment
-                android:id="@+id/weather_fragment"
-                android:name="com.xidian.flyhigher.magicweather.WeatherFragment"
+            <LinearLayout
+                android:id="@+id/circle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1">
+
+            </android.support.v4.view.ViewPager>
+
         </LinearLayout>
 
 
