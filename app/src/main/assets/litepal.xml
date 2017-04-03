@@ -9,6 +9,7 @@
         <mapping class="com.xidian.flyhigher.magicweather.db.Province" />
         <mapping class="com.xidian.flyhigher.magicweather.db.City" />
         <mapping class="com.xidian.flyhigher.magicweather.db.County" />
+        <mapping class="com.xidian.flyhigher.magicweather.db.SelectCity" />
     </list>
 
 </litepal>

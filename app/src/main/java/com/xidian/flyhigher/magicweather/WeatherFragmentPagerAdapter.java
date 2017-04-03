@@ -23,7 +23,7 @@ public class WeatherFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return new WeatherFragment();
         } else if (position == 1){
-            return new WeatherFragment();
+            return new WeatherSecondFragment();
         } else {
             return new WeatherFragment();
         }

@@ -18,23 +18,30 @@
                 android:id="@+id/title_bar"
                 layout="@layout/title" />
 
-            <LinearLayout
-                android:id="@+id/circle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"/>
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpager"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
 
-            </android.support.v4.view.ViewPager>
+
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </android.support.v4.view.ViewPager>
+
+                <LinearLayout
+                    android:id="@+id/circle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal" />
+
+            </RelativeLayout>
 
         </LinearLayout>
-
 
         <fragment
             android:id="@+id/choose_area_fragment"

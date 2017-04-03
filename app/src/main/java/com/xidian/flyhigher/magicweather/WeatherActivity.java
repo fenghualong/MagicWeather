@@ -40,6 +40,8 @@ public class WeatherActivity extends AppCompatActivity {
         circle_linearLayout = (LinearLayout) findViewById(R.id.circle);
         // Find the view pager that will allow the user to swipe between fragments
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+
         // Create an adapter that knows which fragment should be shown on each page
         WeatherFragmentPagerAdapter adapter = new WeatherFragmentPagerAdapter(getSupportFragmentManager(),this);
         initPoint();
@@ -102,7 +104,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         });
 
-
+        drawerLayout.closeDrawers();
     }
 
     private void initPoint() {
@@ -117,4 +119,21 @@ public class WeatherActivity extends AppCompatActivity {
         }
         pointViews[0].setImageResource(R.drawable.circle_dot);
     }
+
+    @Override
+    protected void onDestroy(){
+
+        super.onDestroy();
+        drawerLayout.closeDrawers();
+    }
+
+    @Override
+    protected void onStart(){
+
+        super.onStart();
+        drawerLayout.closeDrawers();
+    }
+
+
+
 }

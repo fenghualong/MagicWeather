@@ -2,9 +2,7 @@ package com.xidian.flyhigher.magicweather;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +17,7 @@ import android.widget.Toast;
 import com.xidian.flyhigher.magicweather.db.City;
 import com.xidian.flyhigher.magicweather.db.County;
 import com.xidian.flyhigher.magicweather.db.Province;
+import com.xidian.flyhigher.magicweather.db.SelectCity;
 import com.xidian.flyhigher.magicweather.util.HttpUtil;
 import com.xidian.flyhigher.magicweather.util.Utility;
 
@@ -110,24 +109,12 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity = cityList.get(position);
                     queryCounties();
                 }else if (currentLevel == LEVEL_COUNTY) {
-                    String weatherId = countyList.get(position).getWeatherId();
-                    weatherId = "cityid="+weatherId;
-                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-                    editor.putString("weather_id", weatherId);
-                    editor.apply();
-                    if (getActivity() instanceof MainActivity) {
-                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                        //intent.putExtra("weather_id", weatherId);
-                        startActivity(intent);
-                        getActivity().finish();
-                    } else if (getActivity() instanceof WeatherActivity) {
-                        WeatherActivity activity = (WeatherActivity) getActivity();
-                        activity.drawerLayout.closeDrawers();
-                        //SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-                        //editor.putString("weather_id", weatherId);
-                        //editor.apply();
-                        //activity.requestWeather(weatherId);
-                    }
+                    String cityName = countyList.get(position).getCountyName();
+                    SelectCity selectCity = new SelectCity();
+                    selectCity.setCityName(cityName);
+                    selectCity.save();
+                    Intent intent = new Intent(getActivity(),ItemListActivity.class);
+                    startActivity(intent);
                 }
             }
         });

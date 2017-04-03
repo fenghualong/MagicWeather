@@ -32,7 +32,7 @@ import static com.xidian.flyhigher.magicweather.R.id.weather;
  * Created by fhl on 2017/3/24.
  */
 
-public class WeatherFragment extends Fragment{
+public class WeatherSecondFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     private TextView textView_weather;
     private TextView textView_title_update_time;
@@ -56,8 +56,8 @@ public class WeatherFragment extends Fragment{
         //Log.i("WeatherFragment","weatherString: " + weatherString);
 
         //String weatherId = getActivity().getIntent().getStringExtra("weather_id");
-        String weatherId = getActivity().getIntent().getStringExtra("position");
-        //String weatherId = prefs.getString("weather_id", null);
+        //String weatherId = getActivity().getIntent().getStringExtra("position");
+        String weatherId = prefs.getString("weather_id", null);
         //String weatherId = "city=西安";
         requestWeather(weatherId);
 
@@ -73,7 +73,10 @@ public class WeatherFragment extends Fragment{
 
 
 
-
+     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key){
+          Log.i("WeatherSecondFragment","key: " + key + "\n"
+          + "sharedPreferences" + sharedPreferences);
+     }
 
 
 
@@ -126,11 +129,11 @@ public class WeatherFragment extends Fragment{
     /**
      * 处理并展示Weather实体类中的数据。
      */
-   private void showWeatherInfo(Weather weather) {
+    private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
         String updateTime = weather.basic.update.updateTime.split(" ")[1];
         String degree = weather.now.temperature + "℃";
-       String weatherInfo = weather.now.more.info;
+        String weatherInfo = weather.now.more.info;
 
 
         textView_title_update_time.setText(updateTime);
@@ -142,27 +145,27 @@ public class WeatherFragment extends Fragment{
 
         textView_weather.setText(weather_info);
 
-       //获取屏幕宽度
-       DisplayMetrics dm;
-       dm = getResources().getDisplayMetrics();
-       int displayWidth = dm.widthPixels;
-       int displayHeight = dm.heightPixels;
+        //获取屏幕宽度
+        DisplayMetrics dm;
+        dm = getResources().getDisplayMetrics();
+        int displayWidth = dm.widthPixels;
+        int displayHeight = dm.heightPixels;
 
-       //设置循环视图方向及大小
-       LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-       layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-       recyclerView.setLayoutManager(layoutManager);
-       ForecastAdapter adapter = new ForecastAdapter(weather.forecastList, getActivity());
+        //设置循环视图方向及大小
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(layoutManager);
+        ForecastAdapter adapter = new ForecastAdapter(weather.forecastList, getActivity());
 
-       int mWidth = displayWidth / 4;
-       adapter.SetItemWidth(mWidth);
-       recyclerView.setAdapter(adapter);
+        int mWidth = displayWidth / 4;
+        adapter.SetItemWidth(mWidth);
+        recyclerView.setAdapter(adapter);
 
         /*
     *处理和显示背景Gif图
      */
-       gifView.setGifImage(R.drawable.rian);
-       gifView.setShowDimension(displayWidth, displayHeight);
+        gifView.setGifImage(R.drawable.rian);
+        gifView.setShowDimension(displayWidth, displayHeight);
     }
 
 
