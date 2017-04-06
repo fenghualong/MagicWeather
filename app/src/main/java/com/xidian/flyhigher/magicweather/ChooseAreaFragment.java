@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,11 +111,21 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 }else if (currentLevel == LEVEL_COUNTY) {
                     String cityName = countyList.get(position).getCountyName();
-                    SelectCity selectCity = new SelectCity();
-                    selectCity.setCityName(cityName);
-                    selectCity.save();
-                    Intent intent = new Intent(getActivity(),ItemListActivity.class);
-                    startActivity(intent);
+                    List<SelectCity> citys = DataSupport.where("cityName = ?",cityName).find(SelectCity.class);
+                    if(citys.isEmpty()){
+                        Log.i("ChooseAreaFragment","citys size is: " + citys.size());
+                        SelectCity selectCity = new SelectCity();
+                        selectCity.setCityName(cityName);
+                        selectCity.save();
+                        Intent intent = new Intent(getActivity(),ItemListActivity.class);
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(getContext(),"该城市已存在",Toast.LENGTH_SHORT).show();
+                        for (SelectCity selectCity : citys) {
+                            Log.i("ChooseAreaFragment", selectCity.getCityName() +": id: " + selectCity.getId());
+                        }
+                    }
+
                 }
             }
         });
