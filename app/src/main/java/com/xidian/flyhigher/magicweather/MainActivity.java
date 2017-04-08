@@ -99,16 +99,17 @@ public class MainActivity extends AppCompatActivity {
                 city = city.substring(0,city.indexOf("市"));
                 Log.i("MainActivity","city: " + city);
 
-                List<SelectCity> citys = DataSupport.where("id = ?","1").find(SelectCity.class);
+                List<SelectCity> citys = DataSupport.where("isLocationCity != ?","0").find(SelectCity.class);
                 if(citys.isEmpty()){
                     //SelectCity selectCity = DataSupport.find(SelectCity.class, 1);
                     SelectCity selectCity = new SelectCity();
                     selectCity.setCityName(city);
+                    selectCity.setLocationCity(true);
                     selectCity.save();
                 }else{
                     SelectCity selectCity = new SelectCity();
                     selectCity.setCityName(city);
-                    selectCity.updateAll("id == ?","1");
+                    selectCity.updateAll("isLocationCity != ?","0");
                 }
 
                 Intent intent = new Intent(MainActivity.this,Main2Activity.class);

@@ -11,6 +11,16 @@ public class SelectCity extends DataSupport {
 
     private String cityName;
 
+    private boolean isLocationCity;
+
+    public boolean isLocationCity() {
+        return isLocationCity;
+    }
+
+    public void setLocationCity(boolean locationCity) {
+        isLocationCity = locationCity;
+    }
+
     public int getId() {
         return id;
     }

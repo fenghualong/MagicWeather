@@ -28,11 +28,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".WeatherActivity"
@@ -49,17 +45,27 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            </activity>
         <activity
             android:name=".ItemListActivity"
             android:label="@string/title_item_list"
             android:parentActivityName=".Main2Activity"
-            android:theme="@style/AppTheme.DarkActionBar">
+            android:theme="@style/AppTheme.DarkActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main2Activity" />
         </activity>
-        <activity android:name=".Main3Activity" />
+        <activity android:name=".Main3Activity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

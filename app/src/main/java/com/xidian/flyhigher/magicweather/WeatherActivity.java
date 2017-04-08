@@ -87,6 +87,7 @@ public class WeatherActivity extends AppCompatActivity {
 
                 //Toast.makeText(WeatherActivity.this,"you clicked share image",Toast.LENGTH_SHORT).show();
 
+                //final View rootView = getRootView();
                 View view = v.getRootView();
                 view.setDrawingCacheEnabled(true);
                 view.buildDrawingCache();

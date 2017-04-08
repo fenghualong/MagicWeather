@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xidian.flyhigher.magicweather.db.SelectCity;
 
@@ -116,13 +115,16 @@ public class ItemListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(position != 0){
-                        DataSupport.deleteAll(SelectCity.class,"cityName = ?", mCitys.get(position));
-                        citysList.remove(position);
-                        setupRecyclerView((RecyclerView) recyclerView);
-                    }else{
-                        Toast.makeText(ItemListActivity.this,"第一行不可删除",Toast.LENGTH_SHORT).show();
-                    }
+                    //if(position != 0){
+                        //DataSupport.deleteAll(SelectCity.class,"cityName = ?", mCitys.get(position));
+                        //citysList.remove(position);
+                        //setupRecyclerView((RecyclerView) recyclerView);
+                    //}else{
+                    //    Toast.makeText(ItemListActivity.this,"第一行不可删除",Toast.LENGTH_SHORT).show();
+                    //}
+                    Intent intent = new Intent(ItemListActivity.this,Main2Activity.class);
+                    intent.putExtra("position",position);
+                    startActivity(intent);
 
                 }
             });
