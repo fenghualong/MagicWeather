@@ -27,9 +27,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".WeatherActivity"
             android:screenOrientation="portrait" />
@@ -45,27 +43,49 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
 
+        </activity>
+        <activity
+            android:name=".ItemListActivity"
+            android:label="@string/title_item_list"
+            android:parentActivityName=".Main2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.DarkActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main2Activity" />
+        </activity>
+        <activity
+            android:name=".Main3Activity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".firstCheckActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            </activity>
-        <activity
-            android:name=".ItemListActivity"
-            android:label="@string/title_item_list"
-            android:parentActivityName=".Main2Activity"
-            android:theme="@style/AppTheme.DarkActionBar"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main2Activity" />
         </activity>
-        <activity android:name=".Main3Activity"
-            android:screenOrientation="portrait"/>
+        <!-- 下面这一个接受器和service都是加的 基本上全是固定格式 改变的地方我加备注 -->
+        <receiver android:name=".APPWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- 下面这个是接受我自己发送的一广播,我这个广播在服务中启动一直发送+睡眠+发送 -->
+                <action android:name="com.xian.leo.update" />
+            </intent-filter>
+            <!-- 下面的android:name 是固定的  android:resource就是我注释的配置文件 -->
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <service android:name=".service.WidgetService">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APP_WIDGET_SERVICE" />
+            </intent-filter>
+        </service>
 
     </application>
 

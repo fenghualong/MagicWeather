@@ -5,9 +5,12 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -54,6 +57,7 @@ import static com.xidian.flyhigher.magicweather.R.id.weather;
 
 public class Main2Activity extends AppCompatActivity {
 
+    private static final String TAG = "Main2Activity";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -85,6 +89,8 @@ public class Main2Activity extends AppCompatActivity {
 
     private LinearLayout circle_linearLayout;
 
+    public static  Weather mweather;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +99,9 @@ public class Main2Activity extends AppCompatActivity {
         circle_linearLayout = (LinearLayout) findViewById(R.id.circle);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
 
@@ -110,43 +118,40 @@ public class Main2Activity extends AppCompatActivity {
         }
 
 
-
-
-
         initCity();
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),citysList);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         Log.i("Main2Activity","citysList.size()"+citysList.size());
-        initPoint(citysList.size());
+      //  initPoint(citysList.size());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",0);
-        setPointViews(position);
+      //  setPointViews(position);
         Log.i("Main3Activity","intent.getIntExtra position: "+ position);
         mViewPager.setCurrentItem(position);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-            @Override
-            public void onPageScrollStateChanged(int state){
-                Log.i("MainActivity","TEST:\n" +
-                        "state: " + state);
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
-                Log.i("MainActivity","TEST:\n"
-                        + "posotion: " + position + "\n"
-                        + "positionOffset: " + positionOffset + "\n"
-                        + "positionOffsetPixels: " + positionOffsetPixels);
-            }
-
-            @Override
-            public void onPageSelected(int position){
-                //pointViews[position].setImageResource(R.drawable.circle_dot);
-                setPointViews(position);
-            }
-        });
+//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+//            @Override
+//            public void onPageScrollStateChanged(int state){
+//                Log.i("MainActivity","TEST:\n" +
+//                        "state: " + state);
+//            }
+//
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
+//                Log.i("MainActivity","TEST:\n"
+//                        + "posotion: " + position + "\n"
+//                        + "positionOffset: " + positionOffset + "\n"
+//                        + "positionOffsetPixels: " + positionOffsetPixels);
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position){
+//                //pointViews[position].setImageResource(R.drawable.circle_dot);
+//                setPointViews(position);
+//            }
+//        });
 
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -160,26 +165,31 @@ public class Main2Activity extends AppCompatActivity {
 
     }
     private void setPointViews(int position){
-        for (int x = 0; x < pointViews.length; x++) {
-            pointViews[x].setImageResource(R.drawable.circle_gray);
-            if (x == position) {
-                pointViews[x].setImageResource(R.drawable.circle_dot);;
+        if(position > 1){
+            for (int x = 0; x < pointViews.length; x++) {
+                pointViews[x].setImageResource(R.drawable.circle_gray);
+                if (x == position) {
+                    pointViews[x].setImageResource(R.drawable.circle_dot);;
+                }
             }
         }
+
     }
 
     private void initPoint(int length) {
-        Log.i("Main2Activity","initPoint()");
-        pointViews = new ImageView[length];        // 设置对应的小圆点
-        for (int x = 0; x < length; x++) {
-            ImageView iv = new ImageView(this);
-            pointViews[x] = iv;
-            pointViews[x].setImageResource(R.drawable.circle_gray);
-            pointViews[x].setPadding(10, 0, 10, 0);
-            pointViews[x].setEnabled(false);
-            circle_linearLayout.addView(pointViews[x]);
+        if(length > 1){
+            Log.i("Main2Activity","initPoint()" + length);
+            pointViews = new ImageView[length];        // 设置对应的小圆点
+            for (int x = 0; x <= length; x++) {
+                ImageView iv = new ImageView(this);
+                pointViews[x] = iv;
+                pointViews[x].setImageResource(R.drawable.circle_gray);
+                pointViews[x].setPadding(10, 0, 10, 0);
+                pointViews[x].setEnabled(false);
+                circle_linearLayout.addView(pointViews[x]);
+            }
+            pointViews[0].setImageResource(R.drawable.circle_dot);
         }
-        pointViews[0].setImageResource(R.drawable.circle_dot);
     }
 
     private void initCity(){
@@ -203,13 +213,28 @@ public class Main2Activity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this,ItemListActivity.class);
-            startActivity(intent);
-            return true;
+//
+        switch(item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this,ItemListActivity.class);
+                startActivity(intent);
+               return true;
+            case R.id.share:
+                View view = getWindow().getDecorView();
+                view.setDrawingCacheEnabled(true);
+                view.buildDrawingCache();
+                Bitmap bitmap = view.getDrawingCache();
+
+                if (bitmap != null) {
+                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,null,null));
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
+                    shareIntent.setType("image/*");
+                    startActivity(shareIntent);
+                }
         }
 
         return super.onOptionsItemSelected(item);
@@ -254,7 +279,7 @@ public class Main2Activity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.weather_fragment, container, false);
             // 初始化各控件
             textView_weather = (TextView) rootView.findViewById(weather);
-            textView_title_update_time = (TextView) rootView.findViewById(R.id.title_update_time);
+            //textView_title_update_time = (TextView) rootView.findViewById(R.id.title_update_time);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_weather);
             gifView = (GifView) rootView.findViewById(R.id.homeBackgroundGif);
             swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
@@ -268,10 +293,12 @@ public class Main2Activity extends AppCompatActivity {
             String weatherString = preferences.getString(weathercity,null);
             if(weatherString != null){
                 Weather weather = Utility.handleWeatherResponse(weatherString);
+
                 showWeatherInfo(weather);
             }else{
                 requestWeather(weathercity);
             }
+
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -293,6 +320,9 @@ public class Main2Activity extends AppCompatActivity {
                     final String responseText = response.body().string();
                     Log.i("WeatherActivity", "TEST: " + responseText);
                     final Weather weather = Utility.handleWeatherResponse(responseText);
+                    mweather = weather;
+
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -328,13 +358,12 @@ public class Main2Activity extends AppCompatActivity {
          */
         private void showWeatherInfo(Weather weather) {
             String cityName = weather.basic.cityName;
-            String updateTime = weather.basic.update.updateTime.split(" ")[1];
+            //String updateTime = weather.basic.update.updateTime.split(" ")[1];
             String degree = weather.now.temperature + "℃";
             String weatherInfo = weather.now.more.info;
 
 
-
-            textView_title_update_time.setText(updateTime);
+            //textView_title_update_time.setText(updateTime);
 
             String weather_info = cityName + "\n"
                     + degree + "\n"

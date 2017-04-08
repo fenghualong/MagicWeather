@@ -128,12 +128,12 @@ public class WeatherFragment extends Fragment{
      */
    private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
-        String updateTime = weather.basic.update.updateTime.split(" ")[1];
+        //String updateTime = weather.basic.update.updateTime.split(" ")[1];
         String degree = weather.now.temperature + "℃";
-       String weatherInfo = weather.now.more.info;
+        String weatherInfo = weather.now.more.info;
 
 
-        textView_title_update_time.setText(updateTime);
+        //textView_title_update_time.setText(updateTime);
 
         String weather_info = cityName + "\n"
                 + degree + "\n"

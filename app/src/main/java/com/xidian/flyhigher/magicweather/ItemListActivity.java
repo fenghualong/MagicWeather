@@ -1,9 +1,11 @@
 package com.xidian.flyhigher.magicweather;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,6 +64,32 @@ public class ItemListActivity extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.item_list);
+//        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                Toast.makeText(ItemListActivity.this, "aaaa", Toast.LENGTH_SHORT).show();
+//                String[] mMenu = {"删除这一项","取消"};
+//                AlertDialog.Builder builder = new AlertDialog.Builder(ItemListActivity.this);
+//                builder.setTitle("提示");
+//                builder.setItems(mMenu, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which){
+//                            case 0 :
+//
+//                                break;
+//                            case 1:
+//                                //do nothings
+//                                break;
+//                            default:
+//                                break;
+//                        }
+//                    }
+//                });
+//                builder.setNegativeButton("Cancel",null);
+//                return false;
+//            }
+//        });
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
@@ -100,6 +128,8 @@ public class ItemListActivity extends AppCompatActivity {
             mCitys = citys;
         }
 
+
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
@@ -111,7 +141,32 @@ public class ItemListActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mIdView.setText(position + 1 + "");
             holder.mContentView.setText(mCitys.get(position));
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
 
+                    String[] mMenu = {"删除这一项"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ItemListActivity.this);
+                    builder.setTitle("提示");
+                    builder.setItems(mMenu, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case 0 :
+                                    DataSupport.deleteAll(SelectCity.class,"cityName = ?", mCitys.get(position));
+                                    citysList.remove(position);
+                                    setupRecyclerView((RecyclerView) recyclerView);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("Cancel",null);
+                    builder.show();
+                    return false;
+                }
+            });
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,6 +183,16 @@ public class ItemListActivity extends AppCompatActivity {
 
                 }
             });
+
+//            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    DataSupport.deleteAll(SelectCity.class,"cityName = ?", mCitys.get(position));
+//                    citysList.remove(position);
+//                    setupRecyclerView((RecyclerView) recyclerView);
+//                    return false;
+//                }
+//            });
         }
 
         @Override
