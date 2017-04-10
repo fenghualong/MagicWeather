@@ -124,34 +124,34 @@ public class Main2Activity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         Log.i("Main2Activity","citysList.size()"+citysList.size());
-      //  initPoint(citysList.size());
+        initPoint(citysList.size());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",0);
-      //  setPointViews(position);
+        setPointViews(position);
         Log.i("Main3Activity","intent.getIntExtra position: "+ position);
         mViewPager.setCurrentItem(position);
-//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-//            @Override
-//            public void onPageScrollStateChanged(int state){
-//                Log.i("MainActivity","TEST:\n" +
-//                        "state: " + state);
-//            }
-//
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
-//                Log.i("MainActivity","TEST:\n"
-//                        + "posotion: " + position + "\n"
-//                        + "positionOffset: " + positionOffset + "\n"
-//                        + "positionOffsetPixels: " + positionOffsetPixels);
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position){
-//                //pointViews[position].setImageResource(R.drawable.circle_dot);
-//                setPointViews(position);
-//            }
-//        });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrollStateChanged(int state){
+                Log.i("MainActivity","TEST:\n" +
+                        "state: " + state);
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
+                Log.i("MainActivity","TEST:\n"
+                        + "posotion: " + position + "\n"
+                        + "positionOffset: " + positionOffset + "\n"
+                        + "positionOffsetPixels: " + positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position){
+                //pointViews[position].setImageResource(R.drawable.circle_dot);
+                setPointViews(position);
+            }
+        });
 
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -165,7 +165,7 @@ public class Main2Activity extends AppCompatActivity {
 
     }
     private void setPointViews(int position){
-        if(position > 1){
+        if(position > 0){
             for (int x = 0; x < pointViews.length; x++) {
                 pointViews[x].setImageResource(R.drawable.circle_gray);
                 if (x == position) {
@@ -180,7 +180,7 @@ public class Main2Activity extends AppCompatActivity {
         if(length > 1){
             Log.i("Main2Activity","initPoint()" + length);
             pointViews = new ImageView[length];        // 设置对应的小圆点
-            for (int x = 0; x <= length; x++) {
+            for (int x = 0; x < length; x++) {
                 ImageView iv = new ImageView(this);
                 pointViews[x] = iv;
                 pointViews[x].setImageResource(R.drawable.circle_gray);
