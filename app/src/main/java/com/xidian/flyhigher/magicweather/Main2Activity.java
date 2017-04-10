@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -128,9 +127,13 @@ public class Main2Activity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",0);
-        setPointViews(position);
-        Log.i("Main3Activity","intent.getIntExtra position: "+ position);
-        mViewPager.setCurrentItem(position);
+        if(position > 0){
+
+            setPointViews(position);
+            Log.i("Main3Activity","intent.getIntExtra position: "+ position);
+            mViewPager.setCurrentItem(position);
+        }
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
             @Override
             public void onPageScrollStateChanged(int state){
@@ -165,14 +168,14 @@ public class Main2Activity extends AppCompatActivity {
 
     }
     private void setPointViews(int position){
-        if(position > 0){
+//        if(position > 0){
             for (int x = 0; x < pointViews.length; x++) {
                 pointViews[x].setImageResource(R.drawable.circle_gray);
                 if (x == position) {
                     pointViews[x].setImageResource(R.drawable.circle_dot);;
                 }
             }
-        }
+//        }
 
     }
 
@@ -289,7 +292,8 @@ public class Main2Activity extends AppCompatActivity {
             Log.i("Main2Activity","R.string.section_format: " + getString(R.string.section_format));
 
             weathercity = getArguments().getString(ARG_SECTION_NUMBER);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences preferences = getActivity().getSharedPreferences("weather_data",MODE_PRIVATE);
             String weatherString = preferences.getString(weathercity,null);
             if(weatherString != null){
                 Weather weather = Utility.handleWeatherResponse(weatherString);
@@ -318,7 +322,7 @@ public class Main2Activity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     final String responseText = response.body().string();
-                    Log.i("WeatherActivity", "TEST: " + responseText);
+                    Log.i("Main2Activity", "TEST: " + responseText);
                     final Weather weather = Utility.handleWeatherResponse(responseText);
                     mweather = weather;
 
@@ -327,7 +331,8 @@ public class Main2Activity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (weather != null && "ok".equals(weather.status)) {
-                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("weather_data",MODE_PRIVATE).edit();
+                                //SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
                                 editor.putString(weathercity, responseText);
                                 editor.apply();
                                 showWeatherInfo(weather);
@@ -475,7 +480,7 @@ public class Main2Activity extends AppCompatActivity {
 
                 String city = location.getCity();
                 city = city.substring(0,city.indexOf("市"));
-                Log.i("MainActivity","city: " + city);
+                Log.i("Main2Activity","city: " + city);
 
                 List<SelectCity> citys = DataSupport.where("isLocationCity != ?","0").find(SelectCity.class);
                 if(citys.isEmpty()){
@@ -560,6 +565,10 @@ public class Main2Activity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // TODO Auto-generated method stub
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        locService.start();
+        if(ContextCompat.checkSelfPermission(Main2Activity.this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            locService.start();
+        }else{
+            getPersimmions();
+        }
     }
 }

@@ -64,32 +64,6 @@ public class ItemListActivity extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.item_list);
-//        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                Toast.makeText(ItemListActivity.this, "aaaa", Toast.LENGTH_SHORT).show();
-//                String[] mMenu = {"删除这一项","取消"};
-//                AlertDialog.Builder builder = new AlertDialog.Builder(ItemListActivity.this);
-//                builder.setTitle("提示");
-//                builder.setItems(mMenu, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which){
-//                            case 0 :
-//
-//                                break;
-//                            case 1:
-//                                //do nothings
-//                                break;
-//                            default:
-//                                break;
-//                        }
-//                    }
-//                });
-//                builder.setNegativeButton("Cancel",null);
-//                return false;
-//            }
-//        });
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 

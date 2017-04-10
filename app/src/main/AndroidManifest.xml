@@ -28,9 +28,6 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".WeatherActivity"
-            android:screenOrientation="portrait" />
 
         <service
             android:name="com.baidu.location.f"
