@@ -26,7 +26,7 @@ public class firstCheckActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
         flags = sharedPreferences.getBoolean("flag",false);
-        setContentView(R.layout.activity_main2);
+        //setContentView(R.layout.activity_main2);
         if(flags == false && (info == null || !info.isAvailable())) {
             setContentView(R.layout.judege_first);
             findViewById(R.id.btn_first_check).setOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,7 @@ public class firstCheckActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
         flags = sharedPreferences.getBoolean("flag",false);
-        setContentView(R.layout.activity_main2);
+        //setContentView(R.layout.activity_main2);
         if(flags == false && (info == null || !info.isAvailable())) {
             setContentView(R.layout.judege_first);
             findViewById(R.id.btn_first_check).setOnClickListener(new View.OnClickListener() {

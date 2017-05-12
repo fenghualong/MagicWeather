@@ -32,10 +32,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ant.liao.GifView;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClientOption;
+import com.bumptech.glide.Glide;
 import com.xidian.flyhigher.magicweather.db.SelectCity;
 import com.xidian.flyhigher.magicweather.gson.Weather;
 import com.xidian.flyhigher.magicweather.service.LocationService;
@@ -57,6 +57,8 @@ import static com.xidian.flyhigher.magicweather.R.id.weather;
 public class Main2Activity extends AppCompatActivity {
 
     private static final String TAG = "Main2Activity";
+    public static final String ANDROID_RESOURCE = "android.resource://";
+    public static final String FOREWAND_SLASH = "/";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -88,7 +90,9 @@ public class Main2Activity extends AppCompatActivity {
 
     private LinearLayout circle_linearLayout;
 
-    public static  Weather mweather;
+    public static Weather mweather;
+
+    public static String locationCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,47 +114,47 @@ public class Main2Activity extends AppCompatActivity {
         mOption.setCoorType("bd09ll");
         locService.setLocationOption(mOption);
         locService.registerListener(listener);
-        if(ContextCompat.checkSelfPermission(Main2Activity.this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(Main2Activity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locService.start();
-        }else{
+        } else {
             getPersimmions();
         }
 
-
+        //citysList.add("铜川");
         initCity();
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),citysList);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), citysList);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        Log.i("Main2Activity","citysList.size()"+citysList.size());
+        Log.i("Main2Activity", "citysList.size()" + citysList.size());
         initPoint(citysList.size());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         Intent intent = getIntent();
-        int position = intent.getIntExtra("position",0);
-        if(position > 0){
+        int position = intent.getIntExtra("position", 0);
+        if (position > 0) {
 
             setPointViews(position);
-            Log.i("Main3Activity","intent.getIntExtra position: "+ position);
+            Log.i("Main3Activity", "intent.getIntExtra position: " + position);
             mViewPager.setCurrentItem(position);
         }
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrollStateChanged(int state){
-                Log.i("MainActivity","TEST:\n" +
+            public void onPageScrollStateChanged(int state) {
+                Log.i("MainActivity", "TEST:\n" +
                         "state: " + state);
             }
 
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
-                Log.i("MainActivity","TEST:\n"
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.i("MainActivity", "TEST:\n"
                         + "posotion: " + position + "\n"
                         + "positionOffset: " + positionOffset + "\n"
                         + "positionOffsetPixels: " + positionOffsetPixels);
             }
 
             @Override
-            public void onPageSelected(int position){
+            public void onPageSelected(int position) {
                 //pointViews[position].setImageResource(R.drawable.circle_dot);
                 setPointViews(position);
             }
@@ -167,21 +171,23 @@ public class Main2Activity extends AppCompatActivity {
 //        });
 
     }
-    private void setPointViews(int position){
+
+    private void setPointViews(int position) {
 //        if(position > 0){
-            for (int x = 0; x < pointViews.length; x++) {
-                pointViews[x].setImageResource(R.drawable.circle_gray);
-                if (x == position) {
-                    pointViews[x].setImageResource(R.drawable.circle_dot);;
-                }
+        for (int x = 0; x < pointViews.length; x++) {
+            pointViews[x].setImageResource(R.drawable.circle_gray);
+            if (x == position) {
+                pointViews[x].setImageResource(R.drawable.circle_dot);
+                ;
             }
+        }
 //        }
 
     }
 
     private void initPoint(int length) {
-        if(length > 1){
-            Log.i("Main2Activity","initPoint()" + length);
+        if (length > 1) {
+            Log.i("Main2Activity", "initPoint()" + length);
             pointViews = new ImageView[length];        // 设置对应的小圆点
             for (int x = 0; x < length; x++) {
                 ImageView iv = new ImageView(this);
@@ -195,11 +201,11 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
-    private void initCity(){
+    private void initCity() {
         selectCityList = DataSupport.findAll(SelectCity.class);
         for (SelectCity selectCity : selectCityList) {
             citysList.add(selectCity.getCityName());
-            Log.i("Main2Activity",selectCity.getCityName() + " , " + selectCity.getId());
+            Log.i("Main2Activity", selectCity.getCityName() + " , " + selectCity.getId());
         }
     }
 
@@ -220,11 +226,11 @@ public class Main2Activity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
 //
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(this,ItemListActivity.class);
+                Intent intent = new Intent(this, ItemListActivity.class);
                 startActivity(intent);
-               return true;
+                return true;
             case R.id.share:
                 View view = getWindow().getDecorView();
                 view.setDrawingCacheEnabled(true);
@@ -232,9 +238,9 @@ public class Main2Activity extends AppCompatActivity {
                 Bitmap bitmap = view.getDrawingCache();
 
                 if (bitmap != null) {
-                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,null,null));
+                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
                     shareIntent.setType("image/*");
                     startActivity(shareIntent);
                 }
@@ -255,11 +261,10 @@ public class Main2Activity extends AppCompatActivity {
 
 
         private TextView textView_weather;
-        private TextView textView_title_update_time;
         private RecyclerView recyclerView;
-        private GifView gifView;
         private String weathercity;
         private SwipeRefreshLayout swipeRefresh;
+        private ImageView GIFView;
 
         public PlaceholderFragment() {
         }
@@ -282,30 +287,27 @@ public class Main2Activity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.weather_fragment, container, false);
             // 初始化各控件
             textView_weather = (TextView) rootView.findViewById(weather);
-            //textView_title_update_time = (TextView) rootView.findViewById(R.id.title_update_time);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_weather);
-            gifView = (GifView) rootView.findViewById(R.id.homeBackgroundGif);
             swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
+            GIFView = (ImageView) rootView.findViewById(R.id.homeBackgroundImageView);
 
-            //textView.setText(getString(R.string.section_format) + getArguments().getString(ARG_SECTION_NUMBER));
-            Log.i("Main2Activity","getArguments(): " + getArguments().getString(ARG_SECTION_NUMBER));
-            Log.i("Main2Activity","R.string.section_format: " + getString(R.string.section_format));
+            Log.i("Main2Activity", "getArguments(): " + getArguments().getString(ARG_SECTION_NUMBER));
+            Log.i("Main2Activity", "R.string.section_format: " + getString(R.string.section_format));
 
             weathercity = getArguments().getString(ARG_SECTION_NUMBER);
-            //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences preferences = getActivity().getSharedPreferences("weather_data",MODE_PRIVATE);
-            String weatherString = preferences.getString(weathercity,null);
-            if(weatherString != null){
+            SharedPreferences preferences = getActivity().getSharedPreferences("weather_data", MODE_PRIVATE);
+            String weatherString = preferences.getString(weathercity, null);
+            if (weatherString != null) {
                 Weather weather = Utility.handleWeatherResponse(weatherString);
-
                 showWeatherInfo(weather);
-            }else{
+            } else {
                 requestWeather(weathercity);
             }
 
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
+                    Log.i("Main2Activity", "onRefresh()" + weathercity);
                     requestWeather(weathercity);
                 }
             });
@@ -324,15 +326,11 @@ public class Main2Activity extends AppCompatActivity {
                     final String responseText = response.body().string();
                     Log.i("Main2Activity", "TEST: " + responseText);
                     final Weather weather = Utility.handleWeatherResponse(responseText);
-                    mweather = weather;
-
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (weather != null && "ok".equals(weather.status)) {
-                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("weather_data",MODE_PRIVATE).edit();
-                                //SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("weather_data", MODE_PRIVATE).edit();
                                 editor.putString(weathercity, responseText);
                                 editor.apply();
                                 showWeatherInfo(weather);
@@ -374,7 +372,7 @@ public class Main2Activity extends AppCompatActivity {
                     + degree + "\n"
                     + weatherInfo + "\n";
 
-            Log.e("Main2Activity","showWeatherInfo" + weather_info);
+            Log.e("Main2Activity", "showWeatherInfo" + weather_info);
             textView_weather.setText(weather_info);
 
             //获取屏幕宽度
@@ -396,10 +394,44 @@ public class Main2Activity extends AppCompatActivity {
         /*
     *处理和显示背景Gif图
      */
-            gifView.setGifImage(R.drawable.rian);
-            gifView.setShowDimension(displayWidth, displayHeight);
+            int weatherIco = weatherIcoSelected(weatherInfo);
+            //gifView.setGifImage(weatherIco);
+            //gifView.setShowDimension(displayWidth, displayHeight);
+            //Uri uri = resourceIdToUri(getContext(), weatherIco);
+            //String gifUrl = "http://i.kinja-img.com/gawker-media/image/upload/s--B7tUiM5l--/gf2r69yorbdesguga10i.gif";
+            Glide.with(this).load(weatherIco).placeholder(weatherIco).into(GIFView);
+
+
         }
 
+//        private static Uri resourceIdToUri(Context context, int resourceId) {
+//            //public static final String ANDROID_RESOURCE = "android.resource://";
+//            //public static final String FOREWAND_SLASH = "/";
+//            return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWAND_SLASH + resourceId);
+//        }
+
+        private int weatherIcoSelected(String weatherInfo) {
+            int iIco = R.drawable.sun;
+            if (weatherInfo.indexOf("阴") != -1) {
+                iIco = R.drawable.overcast;
+            }
+            if (weatherInfo.indexOf("多云") != -1) {
+                iIco = R.drawable.cloud;
+            }
+            if (weatherInfo.indexOf("雨") != -1) {
+                iIco = R.drawable.rain;
+            }
+            if (weatherInfo.indexOf("雷阵雨") != -1) {
+                iIco = R.drawable.thunder;
+            }
+            if (weatherInfo.indexOf("晴") != -1) {
+                iIco = R.drawable.sun;
+            }
+            if (weatherInfo.indexOf("雪") != -1) {
+                iIco = R.drawable.snow;
+            }
+            return iIco;
+        }
     }
 
     /**
@@ -410,7 +442,7 @@ public class Main2Activity extends AppCompatActivity {
 
         private List<String> citysList = new ArrayList<>();
 
-        public SectionsPagerAdapter(FragmentManager fm,List<String> citysList) {
+        public SectionsPagerAdapter(FragmentManager fm, List<String> citysList) {
             super(fm);
             this.citysList = citysList;
         }
@@ -421,7 +453,7 @@ public class Main2Activity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             //String city = position + 1+"";
             String city = citysList.get(position);
-            Log.i("Main2Activity.this","city: " + city);
+            Log.i("Main2Activity.this", "city: " + city);
             return PlaceholderFragment.newInstance(city);
         }
 
@@ -479,38 +511,41 @@ public class Main2Activity extends AppCompatActivity {
                 }
 
                 String city = location.getCity();
-                city = city.substring(0,city.indexOf("市"));
-                Log.i("Main2Activity","city: " + city);
+                locationCity = city.substring(0, city.indexOf("市"));
+                Log.i("Main2Activity", "city: " + city);
+                Log.i("Main2Activity", "District: " + location.getDistrict());
 
-                List<SelectCity> citys = DataSupport.where("isLocationCity != ?","0").find(SelectCity.class);
-                if(citys.isEmpty()){
-                    //SelectCity selectCity = DataSupport.find(SelectCity.class, 1);
-                    SelectCity selectCity = new SelectCity();
-                    selectCity.setCityName(city);
-                    selectCity.setLocationCity(true);
-                    selectCity.save();
-                    citysList.add(city);
-                }else{
-                    SelectCity selectCity = new SelectCity();
-                    selectCity.setCityName(city);
-                    selectCity.updateAll("isLocationCity != ?","0");
-                }
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<SelectCity> citys = DataSupport.where("isLocationCity != ?", "0").find(SelectCity.class);
+                        if (citys.isEmpty()) {
+                            //SelectCity selectCity = DataSupport.find(SelectCity.class, 1);
+                            SelectCity selectCity = new SelectCity();
+                            selectCity.setCityName(locationCity);
+                            selectCity.setLocationCity(true);
+                            selectCity.save();
+                            citysList.add(locationCity);
+                        } else {
+                            SelectCity selectCity = new SelectCity();
+                            selectCity.setCityName(locationCity);
+                            selectCity.updateAll("isLocationCity != ?", "0");
+                        }
+
 //                        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),citysList);
                         mSectionsPagerAdapter.notifyDataSetChanged();
+                        // locService.stop();
 //                        mViewPager.setAdapter(mSectionsPagerAdapter);
-//                    }
-//                });
+                    }
+                });
 
             }
         }
 
-        public void onConnectHotSpotMessage(String s, int i){
+        public void onConnectHotSpotMessage(String s, int i) {
         }
     };
-
 
 
     @TargetApi(23)
@@ -521,14 +556,14 @@ public class Main2Activity extends AppCompatActivity {
              * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
              */
             // 定位精确位置
-            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
             }
-            if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
-			/*
-			 * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
+            /*
+             * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
 			 */
             // 读写权限
             if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -548,14 +583,14 @@ public class Main2Activity extends AppCompatActivity {
     @TargetApi(23)
     private boolean addPermission(ArrayList<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
-            if (shouldShowRequestPermissionRationale(permission)){
+            if (shouldShowRequestPermissionRationale(permission)) {
                 return true;
-            }else{
+            } else {
                 permissionsList.add(permission);
                 return false;
             }
 
-        }else{
+        } else {
             return true;
         }
     }
@@ -565,9 +600,9 @@ public class Main2Activity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // TODO Auto-generated method stub
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(ContextCompat.checkSelfPermission(Main2Activity.this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(Main2Activity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locService.start();
-        }else{
+        } else {
             getPersimmions();
         }
     }

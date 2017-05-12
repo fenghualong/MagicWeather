@@ -69,8 +69,6 @@
         <receiver android:name=".APPWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <!-- 下面这个是接受我自己发送的一广播,我这个广播在服务中启动一直发送+睡眠+发送 -->
-                <action android:name="com.xian.leo.update" />
             </intent-filter>
             <!-- 下面的android:name 是固定的  android:resource就是我注释的配置文件 -->
             <meta-data
@@ -78,11 +76,10 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <service android:name=".service.WidgetService">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APP_WIDGET_SERVICE" />
-            </intent-filter>
-        </service>
+        <service
+            android:name=".service.AutoUpdateService"
+            android:enabled="true"
+            android:exported="true" />
 
     </application>
 

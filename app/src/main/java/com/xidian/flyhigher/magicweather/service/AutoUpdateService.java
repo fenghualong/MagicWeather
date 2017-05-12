@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.xidian.flyhigher.magicweather.db.SelectCity;
@@ -36,7 +35,8 @@ public class AutoUpdateService extends Service {
         updateWeather();
 //        updateBingPic();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int anHour = 8 * 60 * 60 * 1000; // 这是8小时的毫秒数
+        //int anHour = 8 * 60 * 60 * 1000; // 这是8小时的毫秒数
+        int anHour = 60 * 60 *1000; // 这是8小时的毫秒数
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
         Intent i = new Intent(this, AutoUpdateService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
@@ -48,19 +48,20 @@ public class AutoUpdateService extends Service {
     /**
      * 更新天气信息。
      */
-    private void updateWeather(){
+    private void updateWeather() {
         List<SelectCity> selectCityList = DataSupport.findAll(SelectCity.class);
         for (SelectCity selectCity : selectCityList) {
             //citysList.add(selectCity.getCityName());
-            String weatherUrl = "https://api.heweather.com/x3/weather?cityid=" + selectCity.getCityName() + "&key=bc0418b57b2d4918819d3974ac1285d9";
+            final String weatherCity = selectCity.getCityName();
+            String weatherUrl = "https://api.heweather.com/x3/weather?cityid=" + weatherCity + "&key=bc0418b57b2d4918819d3974ac1285d9";
             HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String responseText = response.body().string();
                     Weather weather = Utility.handleWeatherResponse(responseText);
                     if (weather != null && "ok".equals(weather.status)) {
-                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this).edit();
-                        editor.putString("weather", responseText);
+                        SharedPreferences.Editor editor = getSharedPreferences("weather_data", MODE_PRIVATE).edit();
+                        editor.putString(weatherCity, responseText);
                         editor.apply();
                     }
                 }
@@ -72,11 +73,11 @@ public class AutoUpdateService extends Service {
             });
 
 
-            Log.i("ItemListActivity","id: " + selectCity.getId()
-                                         + "\ncityname: " + selectCity.getCityName());
+            Log.i("ItemListActivity", "id: " + selectCity.getId()
+                    + "\ncityname: " + selectCity.getCityName());
         }
 
-
+    }
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //String weatherString = prefs.getString("weather", null);
         //if (weatherString != null) {
@@ -102,7 +103,7 @@ public class AutoUpdateService extends Service {
 //                }
 //            });
 //        }
-    }
+
 
     /**
      * 更新必应每日一图

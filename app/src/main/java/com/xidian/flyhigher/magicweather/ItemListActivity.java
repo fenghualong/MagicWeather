@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xidian.flyhigher.magicweather.db.SelectCity;
 
@@ -51,15 +52,23 @@ public class ItemListActivity extends AppCompatActivity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
-
+        Log.i("ItemListActivity","citysList.size(): " + citysList.size());
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                Intent intent = new Intent(ItemListActivity.this,Main3Activity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ItemListActivity.this,Main3Activity.class);
+//                startActivity(intent);
+
+                if (citysList.size() <= 6) {
+                    Log.i("ItemListActivity","OnClickListener citysList.size(): " + citysList.size());
+                    Intent intent = new Intent(ItemListActivity.this,Main3Activity.class);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(ItemListActivity.this,"最多可选6个城市",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

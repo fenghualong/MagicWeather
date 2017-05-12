@@ -9,8 +9,14 @@
         android:layout_height="match_parent">
 
 
-        <com.ant.liao.GifView
-            android:id="@+id/homeBackgroundGif"
+        <!--<com.ant.liao.GifView-->
+            <!--android:id="@+id/homeBackgroundGif"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:scaleType="centerCrop" />-->
+
+        <ImageView
+            android:id="@+id/homeBackgroundImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
@@ -22,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="15dp"
+            android:layout_marginLeft="8dp"
             android:textColorHighlight="@color/red"
             android:textSize="30sp" />
 
