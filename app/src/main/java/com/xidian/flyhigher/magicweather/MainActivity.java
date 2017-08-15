@@ -45,13 +45,9 @@ public class MainActivity extends AppCompatActivity {
         locService.registerListener(listener);
         locService.start();
 
-
-
-
 //        SelectCity selectCity = DataSupport.find(SelectCity.class, 1);
 //        selectCity.setCityName("西安");
 //        selectCity.save();
-
 
     }
 
@@ -120,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         public void onConnectHotSpotMessage(String s, int i){
         }
     };
-
 
 
     @TargetApi(23)

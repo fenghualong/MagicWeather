@@ -81,7 +81,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder,int position) {
 
-        Forecast forecast = mForecastList.get(position +1);
+        Forecast forecast = mForecastList.get(position + 1);
         String weatherPic = "http://files.heweather.com/cond_icon/"+ forecast.more.info_code +".png";
         Glide.with(context).load(weatherPic).into(holder.weatherImage);
         //holder.weatherImage.setImageResource(R.drawable.weather_rain);
@@ -92,6 +92,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mForecastList.size()-1;
+        return mForecastList.size() - 1;
     }
 }

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.xidian.flyhigher.magicweather.EditsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/show_suggestion_user_defined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:text="@string/sugge_user_define"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_weight="3">
+
+                <Spinner
+                    android:id="@+id/spinner_suggestion1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:spinnerMode="dropdown"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <Spinner
+                    android:id="@+id/spinner_suggestion2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/spinner_suggestion1"
+                    android:spinnerMode="dropdown" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/frequence_update"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <Spinner
+                android:id="@+id/update_frequence_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/weather_notice"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <CheckBox
+                android:id="@+id/notify_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/text_timing_send"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <CheckBox
+                android:id="@+id/sms_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/bad_weather_text_send"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <CheckBox
+                android:id="@+id/sms_weather_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/infomation_sms_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="电话："
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="#9CCC65" />
+
+                <EditText
+                    android:id="@+id/telephone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="此处输入需要发送的电话(长按可调出通讯录）进行选择"
+                    android:textAppearance="?android:textAppearanceMedium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="信息："
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="#9CCC65" />
+
+                <EditText
+                    android:id="@+id/massage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="默认（或手动输入）+自动生成的天气状况"
+                    android:textAppearance="?android:textAppearanceMedium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="所参考的城市："
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="#9CCC65" />
+
+                <EditText
+                    android:id="@+id/sms_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="长按可跳出城市列表"
+                    android:textAppearance="?android:textAppearanceMedium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/weather_sms_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="天气状况："
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="#9CCC65" />
+
+                    <EditText
+                        android:id="@+id/weather_sms_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="例如：多云，晴，小雨......"
+                        android:textAppearance="?android:textAppearanceMedium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/everyday"
+                        style="@style/EditorUniteStyle"
+                        android:text="定时发送时间"
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="#9CCC65" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:paddingLeft="4dp">
+
+
+                        <EditText
+                            android:id="@+id/timing_sending"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="2017-5-22 19"
+                            android:inputType="datetime"
+                            android:textAppearance="?android:textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/clock"
+                            style="@style/EditorUniteStyle"
+                            android:layout_alignParentRight="true"
+                            android:text="点"
+                            android:textAppearance="?android:textAppearanceMedium" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/sure_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="确定" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

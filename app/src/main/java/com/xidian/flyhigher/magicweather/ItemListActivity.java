@@ -2,13 +2,13 @@ package com.xidian.flyhigher.magicweather;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xidian.flyhigher.magicweather.db.SelectCity;
+import com.xidian.flyhigher.magicweather.gson.Weather;
+import com.xidian.flyhigher.magicweather.util.Utility;
 
 import org.litepal.crud.DataSupport;
 
@@ -48,24 +50,25 @@ public class ItemListActivity extends AppCompatActivity {
 
         initCity();
 
-
+       // Log.i("ItemListActivity","id: " + citysList.size());
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
-        Log.i("ItemListActivity","citysList.size(): " + citysList.size());
+        View item_activity_view = findViewById(R.id.item_activity);
+        item_activity_view.setBackgroundResource(R.drawable.citylistbkgnd);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-//                Intent intent = new Intent(ItemListActivity.this,Main3Activity.class);
-//                startActivity(intent);
 
-                if (citysList.size() <= 6) {
-                    Log.i("ItemListActivity","OnClickListener citysList.size(): " + citysList.size());
+                if (citysList.size() < 6) {
                     Intent intent = new Intent(ItemListActivity.this,Main3Activity.class);
                     startActivity(intent);
+                    finish();
+                    //Log.i("ItemListActivity","id: " + citysList.size());
                 }else {
                     Toast.makeText(ItemListActivity.this,"最多可选6个城市",Toast.LENGTH_SHORT).show();
                 }
@@ -75,9 +78,6 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-
-
-
 
     }
 
@@ -89,17 +89,26 @@ public class ItemListActivity extends AppCompatActivity {
         selectCityList = DataSupport.findAll(SelectCity.class);
         for (SelectCity selectCity : selectCityList) {
             citysList.add(selectCity.getCityName());
-            Log.i("ItemListActivity","id: " + selectCity.getId());
+            //Log.i("ItemListActivity","id: " + selectCity.getId());
         }
     }
 
-
-
-
-
-
-
-
+    private int itemIcoSelected(String weatherInfo) {
+        int iIco = R.drawable.item_cloud;
+        if (weatherInfo.indexOf("多云") != -1) {
+            iIco = R.drawable.item_cloud;
+        }
+        if (weatherInfo.indexOf("雨") != -1) {
+            iIco = R.drawable.item_rain;
+        }
+        if (weatherInfo.indexOf("晴") != -1) {
+            iIco = R.drawable.item_sunshine;
+        }
+        if (weatherInfo.indexOf("雪") != -1) {
+            iIco = R.drawable.item_snow;
+        }
+        return iIco;
+    }
 
 
     public class SimpleItemRecyclerViewAdapter
@@ -122,30 +131,33 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mIdView.setText(position + 1 + "");
-            holder.mContentView.setText(mCitys.get(position));
+            //holder.mIdView.setText(position + 1 + "");
+            SharedPreferences preferences = getSharedPreferences("weather_data", MODE_PRIVATE);
+            String weatherString = preferences.getString(citysList.get(position), null);
+            Weather weather = Utility.handleWeatherResponse(weatherString);
+
+            holder.mCityView.setText(mCitys.get(position));
+            holder.mTemperatureView.setText(weather.now.temperature + "℃");
+            String weatherInfo = weather.now.more.info;
+            holder.mWeatherView.setText(weatherInfo);
+            int itemIco = itemIcoSelected(weatherInfo);
+            holder.mView.setBackgroundResource(itemIco);
             holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
 
-                    String[] mMenu = {"删除这一项"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(ItemListActivity.this);
-                    builder.setTitle("提示");
-                    builder.setItems(mMenu, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which){
-                                case 0 :
-                                    DataSupport.deleteAll(SelectCity.class,"cityName = ?", mCitys.get(position));
-                                    citysList.remove(position);
-                                    setupRecyclerView((RecyclerView) recyclerView);
-                                    break;
-                                default:
-                                    break;
-                            }
+                    builder.setTitle("删除这一项");
+                    builder.setPositiveButton("是", new DialogInterface.OnClickListener(){
+                        public void onClick( DialogInterface dialog, int id){
+
+                            DataSupport.deleteAll(SelectCity.class, "cityName = ?",mCitys.get(position));
+                            citysList.remove(position);
+                            setupRecyclerView((RecyclerView) recyclerView);
+
                         }
                     });
-                    builder.setNegativeButton("Cancel",null);
+                    builder.setNegativeButton("否",null);
                     builder.show();
                     return false;
                 }
@@ -167,15 +179,6 @@ public class ItemListActivity extends AppCompatActivity {
                 }
             });
 
-//            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    DataSupport.deleteAll(SelectCity.class,"cityName = ?", mCitys.get(position));
-//                    citysList.remove(position);
-//                    setupRecyclerView((RecyclerView) recyclerView);
-//                    return false;
-//                }
-//            });
         }
 
         @Override
@@ -185,14 +188,18 @@ public class ItemListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            //public final TextView mIdView;
+            public final TextView mCityView;
+            public final TextView mTemperatureView;
+            public final TextView mWeatherView;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                //mIdView = (TextView) view.findViewById(R.id.id);
+                mCityView = (TextView) view.findViewById(R.id.city_item);
+                mTemperatureView = (TextView)view.findViewById(R.id.temperature_item);
+                mWeatherView = (TextView)view.findViewById(R.id.weather_item);
             }
 
 //            @Override

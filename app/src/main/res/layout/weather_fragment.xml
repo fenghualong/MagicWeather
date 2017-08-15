@@ -13,14 +13,14 @@
             <!--android:id="@+id/homeBackgroundGif"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/cloud"-->
             <!--android:scaleType="centerCrop" />-->
-
         <ImageView
-            android:id="@+id/homeBackgroundImageView"
+            android:id="@+id/bkgnd_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
-
+            android:src="@drawable/cloud"
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/weather"
@@ -32,20 +32,38 @@
             android:textColorHighlight="@color/red"
             android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/title_update_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/weather"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="16sp" />
+        <ImageView
+            android:id="@+id/suggestion1Image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="60dp"/>
+
+        <ImageView
+            android:id="@+id/suggestion2Image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_below="@id/suggestion1Image"
+            android:layout_marginTop="10dp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_weather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true" />
+
+        <TextView
+            android:id="@+id/title_update_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_above="@id/recyclerview_weather"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="8sp" />
 
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

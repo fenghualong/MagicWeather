@@ -12,6 +12,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -23,16 +27,24 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="wzg4oxnWejxBBE7rUVT28RE6UCGQXlIY" />
+            android:value="dl6ZQ9RUBiOB7pK77uCfkiDcytj9IIfL" />
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
+        <service
+            android:name=".service.AutoUpdateService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.AlarmService"
+            android:enabled="true"
+            android:exported="true" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -41,9 +53,7 @@
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ItemListActivity"
             android:label="@string/title_item_list"
@@ -57,7 +67,8 @@
         <activity
             android:name=".Main3Activity"
             android:screenOrientation="portrait" />
-        <activity android:name=".firstCheckActivity"
+        <activity
+            android:name=".firstCheckActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -76,11 +87,13 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <service
-            android:name=".service.AutoUpdateService"
-            android:enabled="true"
-            android:exported="true" />
-
+        <activity
+            android:name=".EditsActivity"
+            android:label="@string/action_settings"
+            android:parentActivityName=".Main2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.DarkActionBar" />
+        <activity android:name=".ContractListActivity"></activity>
     </application>
 
 </manifest>

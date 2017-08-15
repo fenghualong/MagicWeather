@@ -2,6 +2,7 @@ package com.xidian.flyhigher.magicweather;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -31,6 +32,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ChooseAreaFragment extends Fragment {
 
     private static final String TAG = "ChooseAreaFragment";
@@ -59,19 +62,22 @@ public class ChooseAreaFragment extends Fragment {
      * 省列表
      */
     //private List<Province> provinceList;
-    private List<String> provincesList = new ArrayList<>();;
+    private List<String> provincesList = new ArrayList<>();
+    ;
 
     /**
      * 市列表
      */
     //private List<City> cityList;
-    private List<String> citysList = new ArrayList<>();;
+    private List<String> citysList = new ArrayList<>();
+    ;
 
     /**
      * 县列表
      */
     //private List<County> countyList;
-    private List<String> countysList = new ArrayList<>();;
+    private List<String> countysList = new ArrayList<>();
+    ;
 
     /**
      * 选中的省份
@@ -89,6 +95,8 @@ public class ChooseAreaFragment extends Fragment {
      * 当前选中的级别
      */
     private int currentLevel;
+
+    private String CITY_SMS_STRING = "abc";
 
 
     @Override
@@ -111,28 +119,58 @@ public class ChooseAreaFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (currentLevel == LEVEL_PROVINCE) {
                     sselectedProvince = provincesList.get(position);
-                    Log.i(TAG,"sselectedProvince" + sselectedProvince);
+                    Log.i(TAG, "sselectedProvince" + sselectedProvince);
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
                     sselectedCity = citysList.get(position);
                     queryCounties();
-                }else if (currentLevel == LEVEL_COUNTY) {
+                } else if (currentLevel == LEVEL_COUNTY) {
                     String cityName = countysList.get(position);
-                    List<SelectCity> citys = DataSupport.where("cityName = ?",cityName).find(SelectCity.class);
-                    if(citys.isEmpty()){
-                        Log.i(TAG,"citys size is: " + citys.size());
-                        SelectCity selectCity = new SelectCity();
-                        selectCity.setCityName(cityName);
-                        selectCity.save();
-                        Intent intent = new Intent(getActivity(),ItemListActivity.class);
-                        startActivity(intent);
-                    }else{
-                        Toast.makeText(getContext(),"该城市已存在",Toast.LENGTH_SHORT).show();
-                        for (SelectCity selectCity : citys) {
-                            Log.i(TAG, selectCity.getCityName() +": id: " + selectCity.getId());
-                        }
-                    }
 
+                    SharedPreferences pref = getActivity().getSharedPreferences(CITY_SMS_STRING, MODE_PRIVATE);
+                    String number_string = pref.getString("city_sms", null);
+                    String city_string = pref.getString("city", null);
+                    Log.i(TAG, "data: " + number_string + "\n" + city_string);
+
+                    if (number_string != null && number_string.equals("1")) {
+
+                        if (city_string != null) {
+                            SharedPreferences.Editor editor = getActivity().getSharedPreferences(city_string, MODE_PRIVATE).edit();
+                            editor.putString("city_sms", cityName);
+                            editor.apply();
+                            SharedPreferences.Editor editor1 = getActivity().getSharedPreferences(CITY_SMS_STRING, MODE_PRIVATE).edit();
+                            editor1.putString("city_sms", "2");
+                            editor1.apply();
+
+                            Intent intent = new Intent(getActivity(), EditsActivity.class);
+                            startActivity(intent);
+                        }
+
+                        getActivity().finish();
+
+                    } else {
+
+
+                        List<SelectCity> citys = DataSupport.where("cityName = ?", cityName).find(SelectCity.class);
+                        if (citys.isEmpty()) {
+                            Log.i(TAG, "citys size is: " + citys.size());
+                            SelectCity selectCity = new SelectCity();
+                            selectCity.setCityName(cityName);
+                            selectCity.save();
+                            List<SelectCity> selectCityList = DataSupport.findAll(SelectCity.class);
+                            int viewPosition = selectCityList.size() - 1;
+                            Intent intent = new Intent(getActivity(), Main2Activity.class);
+                            intent.putExtra("position", viewPosition);
+                            //Intent intent = new Intent(getActivity(),ItemListActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getContext(), "该城市已存在", Toast.LENGTH_SHORT).show();
+                            for (SelectCity selectCity : citys) {
+                                Log.i(TAG, selectCity.getCityName() + ": id: " + selectCity.getId());
+                            }
+                        }
+
+                    }
                 }
             }
         });
@@ -178,7 +216,7 @@ public class ChooseAreaFragment extends Fragment {
             provincesList.clear();
             String province = "";
             for (AllPCC allPCC : allPCCs) {
-                if(!province.equals(allPCC.getProvince())){
+                if (!province.equals(allPCC.getProvince())) {
                     dataList.add(allPCC.getProvince());
                     provincesList.add(allPCC.getProvince());
                     province = allPCC.getProvince();
@@ -212,13 +250,13 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCities() {
         titleText.setText(sselectedProvince);
         backButton.setVisibility(View.VISIBLE);
-        allPCCs = DataSupport.select("city").where("province = ?",sselectedProvince).find(AllPCC.class);
+        allPCCs = DataSupport.select("city").where("province = ?", sselectedProvince).find(AllPCC.class);
         if (allPCCs.size() > 0) {
             dataList.clear();
             citysList.clear();
             String city = "";
             for (AllPCC allPCC : allPCCs) {
-                if(!city.equals(allPCC.getCity())){
+                if (!city.equals(allPCC.getCity())) {
                     dataList.add(allPCC.getCity());
                     citysList.add(allPCC.getCity());
                     city = allPCC.getCity();
@@ -236,7 +274,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties() {
         titleText.setText(sselectedCity);
         backButton.setVisibility(View.VISIBLE);
-        allPCCs = DataSupport.select("county").where("province = ? and city = ?",sselectedProvince,sselectedCity).find(AllPCC.class);
+        allPCCs = DataSupport.select("county").where("province = ? and city = ?", sselectedProvince, sselectedCity).find(AllPCC.class);
         if (allPCCs.size() > 0) {
             dataList.clear();
             countysList.clear();
@@ -297,7 +335,6 @@ public class ChooseAreaFragment extends Fragment {
 //            }
 //        });
 //    }
-
     private void queryFromServer() {
         String weatherUrl = "https://cdn.heweather.com/china-city-list.json";
         showProgressDialog();
@@ -305,10 +342,10 @@ public class ChooseAreaFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
-                Log.i("ChooseAreaFragment","queryFromServer()" + responseText);
-                try{
+                Log.i("ChooseAreaFragment", "queryFromServer()" + responseText);
+                try {
                     JSONArray jsonArray = new JSONArray(responseText);
-                    for(int i = 0; i < jsonArray.length(); i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String provinceZh = jsonObject.getString("provinceZh");
                         String leaderZh = jsonObject.getString("leaderZh");
@@ -318,23 +355,19 @@ public class ChooseAreaFragment extends Fragment {
                         allPCC.setCity(leaderZh);
                         allPCC.setCounty(cityZh);
                         allPCC.save();
-                        Log.i("ChooseAreaFragment",""+i);
+                        Log.i("ChooseAreaFragment", "" + i);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-
+                } finally {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             closeProgressDialog();
                             queryProvinces();
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
+                }
             }
 
             @Override
@@ -371,7 +404,14 @@ public class ChooseAreaFragment extends Fragment {
             progressDialog.dismiss();
         }
     }
-
-
-
 }
+
+
+
+
+
+
+
+
+
+

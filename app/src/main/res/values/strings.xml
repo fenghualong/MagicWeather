@@ -1,9 +1,33 @@
 <resources>
     <string name="app_name">Magic Weather</string>
     <string name="title_activity_main2">Main2Activity</string>
-    <string name="action_settings">城市列表</string>
+    <string name="action_settings">设置</string>
+    <string name="citys_list">城市列表</string>
     <string name="section_format">Hello World from section: %1$s</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_first_check">firstCheck</string>
+
+    <string name="air">空气指数</string>
+    <string name="cw">洗车指数</string>
+    <string name="drsg">穿衣指数</string>
+    <string name="comf">舒适度指数</string>
+    <string name="uv">紫外线指数</string>
+    <string name="flu">感冒指数</string>
+    <string name="sport">运动指数</string>
+    <string name="unshow">不显示</string>
+
+    <string name="sugge_user_define">自定义界面天气建议显示</string>
+    <string name="frequence_update">后台更新频率</string>
+    <string name="weather_notice">通知栏天气</string>
+    <string name="text_timing_send">短信定时提醒</string>
+    <string name="bad_weather_text_send">恶劣天气短信提醒</string>
+
+
+    <string name="one_hour">1h</string>
+    <string name="two_hour">2h</string>
+    <string name="six_hour">6h</string>
+    <string name="twelve_hour">12h</string>
+    <string name="one_day">24h</string>
+    <string name="not_update">不更新</string>
 </resources>

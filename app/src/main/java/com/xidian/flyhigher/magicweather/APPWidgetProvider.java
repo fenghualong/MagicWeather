@@ -32,11 +32,12 @@ import static android.content.Context.MODE_PRIVATE;
         Calendar calender = Calendar.getInstance() ;
 
         int IdImages[] = {
-                R.drawable.weather_sunny,
-                R.drawable.weather_cloud,
-                R.drawable.weather_rain,
-                R.drawable.weather_snow,
-                R.drawable.weather_lightning
+                R.drawable.widget_sun,
+                R.drawable.widget_clouds,
+                R.drawable.widget_rain,
+                R.drawable.widget_snow,
+                R.drawable.widget_lighting,
+                R.drawable.widget_overcast
         };
 
         //CharSequence widgetText = context.getString(R.string.appwidget_text);
@@ -97,6 +98,15 @@ import static android.content.Context.MODE_PRIVATE;
             }
             if(descr.indexOf("雨")!=-1){
                 mIv = IdImages[2];
+            }
+            if (descr.indexOf("多云")!= -1) {
+                mIv = IdImages[1];
+            }
+            if(descr.indexOf("阴")!=-1) {
+                mIv = IdImages[5];
+            }
+            if(descr.indexOf("闪电")!=-1) {
+                mIv = IdImages[4];
             }
             if(descr.indexOf("晴")!= -1){
                 mIv = IdImages[0];

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- These are the options displayed in the gender drop-down Spinner -->
+    <string-array name="array_suggestions_options">
+        <item>@string/unshow</item>
+        <item>@string/cw</item>
+        <item>@string/drsg</item>
+        <item>@string/comf</item>
+        <item>@string/uv</item>
+        <item>@string/flu</item>
+        <item>@string/sport</item>
+    </string-array>
+
+    <string-array name="array_update_frequence_options">
+        <item>@string/not_update</item>
+        <item>@string/one_hour</item>
+        <item>@string/two_hour</item>
+        <item>@string/six_hour</item>
+        <item>@string/twelve_hour</item>
+        <item>@string/one_day</item>
+    </string-array>
+
+</resources>
